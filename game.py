@@ -33,3 +33,57 @@ def create_team(player_name):
                 print(f"Character {j} : {character}")
 
     return team
+
+def print_team(team):
+    print("\n--- Your team ---")
+    for i, character in enumerate(team, 1):
+        if character.is_alive():
+            status = "Dead"
+        else:
+            status = "Alive"
+        print(f'{status}. Character {i}: {character}')
+
+def combat_turn(team, monster):
+    print_line()
+    print("Team's turn.")
+    print_line()
+
+    for character in team:
+        if character.is_alive():
+            damage = character.attack(monster)
+            print(f"{character.name} attacks {monster.name} and deals {damage} damage.")
+
+            if not monster.is_alive():
+                print(f"\n{monster.name} is dead.")
+                return True
+            
+            time.sleep(0.3)
+    
+    print(f"\n{monster.name} HP left: {monster.hp}/{monster.hp_max}")
+
+    print_line()
+    print("Monster's turn.")
+    print_line()
+
+    alive_characters = []
+    for c in team:
+        if c.is_alive():
+            alive_characters.append(c)
+
+    if alive_characters:
+        target = random.choice(alive_characters)
+        damage = monster.attack(target)
+        print(f"{monster.name} attacks {character.name} and deals {damage} damage.")
+
+        if not character.is_alive():
+            print(f"\n{character.name} is dead.")
+
+    time.sleep(0.3)
+    return False
+            
+def verified_defeat(team):
+    for c in team:
+        if c.is_alive():
+            return False
+    return True  
+
