@@ -3,7 +3,7 @@ import time
 from models import Character
 from utils import *
 
-def create_team(player_name):
+de create_team(player_name):
     available_characters = get_all_characters()
     team = []
 
