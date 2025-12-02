@@ -32,4 +32,4 @@ def create_team(player_name):
             for j, character in enumerate(team, 1):
                 print(f"Character {j} : {character}")
 
-    return team
+    return tea
