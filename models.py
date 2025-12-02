@@ -25,7 +25,7 @@ class Character:
         return f"{self.name} - ATK: {self.attack}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
     
 #Classe des monstres
-class Monter:
+class Monster:
 
     def __init__(self, name, attack, armor, hp):
         self.name = name
