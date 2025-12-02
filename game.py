@@ -87,3 +87,55 @@ def verified_defeat(team):
             return False
     return True  
 
+def start_game():
+    print_title("Starting game.")
+
+    player_name = input_text("Enter your name: ")
+    team = create_team(player_name)
+
+    print_title("Starting fight.")
+    print_team(team)
+
+    time.sleep(1)
+
+    wave = 0
+
+    while True:
+        wave +=1
+
+        print_title(f"Wave {wave}")
+
+        monster = get_random_monster()
+        print(f"\n A {monster.name} appears.")
+        print(f"{monster}\n")
+
+        print_team(team)
+
+        time.sleep(0.5)
+
+        while monster.is_alive() and not verified_defeat(team):
+            victory = combat_turn(team, monster)
+
+            if victory:
+                break
+
+            if verified_defeat(team):
+                break
+
+            print_team(team)
+            time.sleep(0.5)
+        
+        if verified_defeat(team):
+            print_title("Defeat. get gud")
+            print(f"\nYou lost at the wave number {wave}")
+            if wave < 2:
+                print(f"You've survived {wave} wave.")
+            else:
+                print(f"You've survived {wave} wave.")
+
+            save_score(player_name, wave - 1)
+            print_line()
+            break
+
+        print(f"\nWave's finished.")
+        time.sleep(1)
