@@ -9,16 +9,16 @@ def db_initialisation():
     db.scores.drop()
 
     characters = [
-        {"name": "Guerrier", "attack": 15, "armor": 10, "hp": 100, "crit_chance": 12},
-        {"name": "Mage", "attack": 20, "armor": 5, "hp": 80, "crit_chance": 18},
-        {"name": "Archer", "attack": 18, "armor": 7, "hp": 90, "crit_chance": 28},
-        {"name": "Voleur", "attack": 22, "armor": 8, "hp": 85, "crit_chance": 35},
-        {"name": "Paladin", "attack": 14, "armor": 12, "hp": 110, "crit_chance": 8},
-        {"name": "Sorcier", "attack": 25, "armor": 3, "hp": 70, "crit_chance": 22},
-        {"name": "Chevalier", "attack": 17, "armor": 15, "hp": 120, "crit_chance": 10},
-        {"name": "Moine", "attack": 19, "armor": 9, "hp": 95, "crit_chance": 25},
-        {"name": "Berserker", "attack": 23, "armor": 6, "hp": 105, "crit_chance": 20},
-        {"name": "Chasseur", "attack": 16, "armor": 11, "hp": 100, "crit_chance": 30}
+        {"name": "Guerrier", "attack": 15, "armor": 10, "hp": 100, "crit_chance": 12, "evasion": 10},
+        {"name": "Mage", "attack": 20, "armor": 5, "hp": 80, "crit_chance": 18, "evasion": 8},
+        {"name": "Archer", "attack": 18, "armor": 7, "hp": 90, "crit_chance": 28, "evasion": 15},
+        {"name": "Voleur", "attack": 22, "armor": 8, "hp": 85, "crit_chance": 35, "evasion": 30},
+        {"name": "Paladin", "attack": 14, "armor": 12, "hp": 110, "crit_chance": 8, "evasion": 5},
+        {"name": "Sorcier", "attack": 25, "armor": 3, "hp": 70, "crit_chance": 22, "evasion": 12},
+        {"name": "Chevalier", "attack": 17, "armor": 15, "hp": 120, "crit_chance": 10, "evasion": 3},
+        {"name": "Moine", "attack": 19, "armor": 9, "hp": 95, "crit_chance": 25, "evasion": 25},
+        {"name": "Berserker", "attack": 23, "armor": 6, "hp": 105, "crit_chance": 20, "evasion": 7},
+        {"name": "Chasseur", "attack": 16, "armor": 11, "hp": 100, "crit_chance": 30, "evasion": 18}
     ]
 
     monsters = [

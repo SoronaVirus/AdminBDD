@@ -2,14 +2,16 @@ import random
 #Classe des personnages
 class Character:
 
-    def __init__(self, name, attack, armor, hp, crit_chance, crit_multiplier=2):
+    def __init__(self, name, attack, armor, hp, crit_chance, evasion):
         self.name = name
         self.attack_power = attack
         self.armor = armor
         self.hp = hp
         self.hp_max = hp
         self.crit_chance = crit_chance
-        self.crit_multiplier = crit_multiplier
+        self.evasion = evasion
+
+        self.crit_multiplier = 2
 
     def is_alive(self):
         return self.hp > 0
@@ -26,13 +28,9 @@ class Character:
             target.hp -= base_damage
             return base_damage, False
     
-    def attack_taken(self, damage):
-        damage_taken = max(0, damage - self.armor)
-        self.hp -= damage_taken
-        return damage_taken
-    
     def __str__(self):
-        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}, CRIT: {self.crit_chance}%"
+        current_hp = max(0, self.hp)
+        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {current_hp}/{self.hp_max}, CRIT: {self.crit_chance}%, EVA: {self.evasion}%"
     
 #Classe des monstres
 class Monster:
@@ -48,11 +46,15 @@ class Monster:
         return self.hp > 0
     
     def attack(self, target):
+        if random.randint(1,100) <= target.evasion:
+            return 0, False
+        
         damage = max(0, self.attack_power - target.armor)
         target.hp -= damage
-        return damage
+        return damage, True
     
     def __str__(self):
-        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
+        current_hp = max(0, self.hp)
+        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {current_hp}/{self.hp_max}"
     
 #Classe des objets ???

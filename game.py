@@ -75,8 +75,12 @@ def combat_turn(team, monster):
 
     if alive_characters:
         target = random.choice(alive_characters)
-        damage = monster.attack(target)
-        print(f"{monster.name} attacks {target.name} and deals {damage} damage.")
+        damage, hit_success = monster.attack(target)
+
+        if hit_success:
+            print(f"{monster.name} attacks {target.name} and deals {damage} damage.")
+        else:
+            print(f"OHMAGAAAAAD DODGED ATTACK MAAAN!!! {monster.name} attacks but {target.name} dodge like Wesker")
 
         if not target.is_alive():
             print(f"\n{target.name} is dead.")
@@ -131,8 +135,10 @@ def start_game():
         if verified_defeat(team):
             print_title("Defeat. get gud")
             print(f"\nYou lost at the wave number {wave}")
-            if wave < 2:
-                print(f"You've survived {wave} wave.")
+            if wave == 0:
+                print(f"You've survived 0 wave.")
+            elif wave == 1:
+                print(f"You've survived 1 wave.")
             else:
                 print(f"You've survived {wave - 1} waves.")
 
