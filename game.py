@@ -3,40 +3,55 @@ import time
 from models import Character
 from utils import *
 
+#Affichage des persos dispo
+def print_available_characters(available_characters):
+    print("Characters available:\n")
+    for i, character in enumerate(available_characters, 1):
+        print(f"{i}. {character}")
+    print_line()
+
+#Affichage de l'équipe actuelle
+def print_current_team(team):
+    if team:
+        print_line()
+        print_title("Actual team")
+        print_line()
+        for j, character in enumerate(team, 1):
+            print(f"Character {j} : {character.name}\n")
+
+#Obternir le choix du perso
+def get_character_choice(available_characters):
+    choice = input_integer("Enter the number of the character: ", 1, len(available_characters))
+    chosen_character = available_characters[choice - 1]
+    available_characters.pop(choice - 1)
+    return chosen_character
+
+#Choisir le perso
+def select_character(available_characters, team, number_member, player_name):
+    clear_terminal()
+    print_title("Team's creation")
+    print(f"Player : {player_name}\n")
+    if team:
+        print_current_team(team)
+    print(f"Selection of the character {number_member}/3\n")
+
+    print_available_characters(available_characters)
+
+    chosen_character = get_character_choice(available_characters)
+    
+    print(f"\n{chosen_character.name} added to the team.\n")
+    time.sleep(2)
+    
+    return chosen_character
+
+#Création de la team
 def create_team(player_name):
     available_characters = get_all_characters()
     team = []
 
-    clear_terminal()
-    print_title("Team's creation")
-    print(f"Player : {player_name}\n")
-
     for nb_member in range(1, 4):
-        print(f"Selection of the character {nb_member}/3\n")
-        print("Characters available:\n")
-
-        for i, character in enumerate(available_characters, 1):
-            print(f"{i}. {character}")
-
-        print_line()
-
-        choice = input_integer("Enter the number of the character: ", 1, len(available_characters))
-
-        chosen_character = available_characters[choice - 1]
+        chosen_character = select_character(available_characters, team, nb_member, player_name)
         team.append(chosen_character)
-
-        available_characters.pop(choice - 1)
-
-        print(f"\n{chosen_character.name} added to the team.\n")
-
-        if nb_member < 3:
-            clear_terminal()
-            print("Actual team:")
-            for j, character in enumerate(team, 1):
-                print(f"Character {j} : {character.name}")
-            print("\n")
-            print_title("Team's creation")
-            print(f"Player : {player_name}\n")
 
     return team
 
