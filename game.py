@@ -146,7 +146,7 @@ def start_game():
         
         if verified_defeat(team):
             clear_terminal()
-            print_title("Defeat. get gud")
+            print_title("Defeated. get gud")
             print(f"\nYou lost at the wave number {wave}")
             if wave == 0:
                 print(f"You've survived 0 wave.")
