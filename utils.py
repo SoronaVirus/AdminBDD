@@ -1,6 +1,10 @@
 from pymongo import MongoClient
 from models import Character, Monster
 import random
+import os
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def get_connection():
     client = MongoClient('mongodb://localhost:27017')

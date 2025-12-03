@@ -7,17 +7,19 @@ def create_team(player_name):
     available_characters = get_all_characters()
     team = []
 
+    clear_terminal()
     print_title("Team's creation")
-    print(f"Player : {player_name}")
-    print("\nCharacters available:\n")
-
-    for i, character in enumerate(available_characters, 1):
-        print(f"{i}. {character}")
-
-    print_line()
+    print(f"Player : {player_name}\n")
 
     for nb_member in range(1, 4):
-        print(f"\nSelection of the character {nb_member}/3")
+        print(f"Selection of the character {nb_member}/3\n")
+        print("Characters available:\n")
+
+        for i, character in enumerate(available_characters, 1):
+            print(f"{i}. {character}")
+
+        print_line()
+
         choice = input_integer("Enter the number of the character: ", 1, len(available_characters))
 
         chosen_character = available_characters[choice - 1]
@@ -25,12 +27,16 @@ def create_team(player_name):
 
         available_characters.pop(choice - 1)
 
-        print(f"{chosen_character} added to the team.")
+        print(f"\n{chosen_character.name} added to the team.\n")
 
         if nb_member < 3:
-            print("\nActual team:")
+            clear_terminal()
+            print("Actual team:")
             for j, character in enumerate(team, 1):
-                print(f"Character {j} : {character}")
+                print(f"Character {j} : {character.name}")
+            print("\n")
+            print_title("Team's creation")
+            print(f"Player : {player_name}\n")
 
     return team
 
@@ -95,11 +101,13 @@ def verified_defeat(team):
     return True  
 
 def start_game():
+    clear_terminal()
     print_title("Starting game")
 
     player_name = input_text("Enter your name: ")
     team = create_team(player_name)
 
+    clear_terminal()
     print_title("Starting fight.")
     print_team(team)
 
@@ -110,6 +118,7 @@ def start_game():
     while True:
         wave +=1
 
+        clear_terminal()
         print_title(f"Wave {wave}")
 
         monster = get_random_monster()
@@ -129,10 +138,14 @@ def start_game():
             if verified_defeat(team):
                 break
 
+            clear_terminal()
+            print_title(f"Wave {wave}")
+            print(f"\nFighting {monster.name}...\n")
             print_team(team)
             time.sleep(2)
         
         if verified_defeat(team):
+            clear_terminal()
             print_title("Defeat. get gud")
             print(f"\nYou lost at the wave number {wave}")
             if wave == 0:
