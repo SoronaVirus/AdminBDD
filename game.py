@@ -38,9 +38,9 @@ def print_team(team):
     print("\n--- Your team ---")
     for i, character in enumerate(team, 1):
         if character.is_alive():
-            status = "Dead"
-        else:
             status = "Alive"
+        else:
+            status = "Dead"
         print(f'{status}. Character {i}: {character}')
 
 def combat_turn(team, monster):
@@ -57,7 +57,7 @@ def combat_turn(team, monster):
                 print(f"\n{monster.name} is dead.")
                 return True
             
-            time.sleep(0.3)
+            time.sleep(3)
     
     print(f"\n{monster.name} HP left: {monster.hp}/{monster.hp_max}")
 
@@ -73,12 +73,12 @@ def combat_turn(team, monster):
     if alive_characters:
         target = random.choice(alive_characters)
         damage = monster.attack(target)
-        print(f"{monster.name} attacks {character.name} and deals {damage} damage.")
+        print(f"{monster.name} attacks {target.name} and deals {damage} damage.")
 
-        if not character.is_alive():
-            print(f"\n{character.name} is dead.")
+        if not target.is_alive():
+            print(f"\n{target.name} is dead.")
 
-    time.sleep(0.3)
+    time.sleep(3)
     return False
             
 def verified_defeat(team):
@@ -88,7 +88,7 @@ def verified_defeat(team):
     return True  
 
 def start_game():
-    print_title("Starting game.")
+    print_title("Starting game")
 
     player_name = input_text("Enter your name: ")
     team = create_team(player_name)
@@ -96,7 +96,7 @@ def start_game():
     print_title("Starting fight.")
     print_team(team)
 
-    time.sleep(1)
+    time.sleep(2)
 
     wave = 0
 
@@ -106,12 +106,12 @@ def start_game():
         print_title(f"Wave {wave}")
 
         monster = get_random_monster()
-        print(f"\n A {monster.name} appears.")
+        print(f"\nA {monster.name} appears.")
         print(f"{monster}\n")
 
         print_team(team)
 
-        time.sleep(0.5)
+        time.sleep(2)
 
         while monster.is_alive() and not verified_defeat(team):
             victory = combat_turn(team, monster)
@@ -123,7 +123,7 @@ def start_game():
                 break
 
             print_team(team)
-            time.sleep(0.5)
+            time.sleep(2)
         
         if verified_defeat(team):
             print_title("Defeat. get gud")
@@ -131,11 +131,11 @@ def start_game():
             if wave < 2:
                 print(f"You've survived {wave} wave.")
             else:
-                print(f"You've survived {wave} wave.")
+                print(f"You've survived {wave - 1} waves.")
 
             save_score(player_name, wave - 1)
             print_line()
             break
 
         print(f"\nWave's finished.")
-        time.sleep(1)
+        time.sleep(3)

@@ -3,7 +3,7 @@ class Character:
 
     def __init__(self, name, attack, armor, hp):
         self.name = name
-        self.attack = attack
+        self.attack_power = attack
         self.armor = armor
         self.hp = hp
         self.hp_max = hp
@@ -12,7 +12,7 @@ class Character:
         return self.hp > 0
     
     def attack(self, target):
-        damage = max(0, self.attack - target.armor)
+        damage = max(0, self.attack_power - target.armor)
         target.hp -= damage
         return damage
     
@@ -22,14 +22,14 @@ class Character:
         return damage_taken
     
     def __str__(self):
-        return f"{self.name} - ATK: {self.attack}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
+        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
     
 #Classe des monstres
 class Monster:
 
     def __init__(self, name, attack, armor, hp):
         self.name = name
-        self.attack = attack
+        self.attack_power = attack
         self.armor = armor
         self.hp = hp
         self.hp_max = hp
@@ -38,11 +38,11 @@ class Monster:
         return self.hp > 0
     
     def attack(self, target):
-        damage = max(0, self.attack - target.armor)
+        damage = max(0, self.attack_power - target.armor)
         target.hp -= damage
         return damage
     
     def __str__(self):
-        return f"{self.name} - ATK: {self.attack}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
+        return f"{self.name} - ATK: {self.attack_power}, DEF: {self.armor}, HP: {self.hp}/{self.hp_max}"
     
 #Classe des objets ???
