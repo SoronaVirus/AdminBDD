@@ -1,11 +1,11 @@
 from pymongo import MongoClient
 
-def data_base_initialisation():
+def db_initialisation():
     client = MongoClient('mongodb://localhost:27017')
     db = client['video_game']
 
-    db.personnages.drop()
-    db.monstres.drop()
+    db.characters.drop()
+    db.monsters.drop()
     db.scores.drop()
 
     characters = [
@@ -34,10 +34,10 @@ def data_base_initialisation():
         {"name": "Squelette", "attack": 15, "armor": 7, "hp": 90}
     ]
 
-    db.personnages.insert_many(characters)
-    db.monstres.insert_many(monsters)
+    db.characters.insert_many(characters)
+    db.monsters.insert_many(monsters)
     
     client.close()
 
 if __name__ == "__main__":
-    data_base_initialisation()
+    db_initialisation()

@@ -11,17 +11,18 @@ def print_line():
 
 def print_title(title):
     print_line()
-    print(f" {title.upper()}")
+    print(f"{title.upper()}")
     print_line()
 
 def get_all_characters():
     db = get_connection()
     characters_db = list(db.characters.find())
-    return [Character(p['name'], p['attack'], p['armor'], p['hp']) for p in characters_db]
+    print(characters_db)
+    return [Character(c['name'], c['attack'], c['armor'], c['hp']) for c in characters_db]
 
 def get_random_monster():
     db = get_connection()
-    monsters_db = list(db.characters.find())
+    monsters_db = list(db.monsters.find())
     monster_data = random.choice(monsters_db)
     return Monster(monster_data['name'], monster_data['attack'], monster_data['armor'], monster_data['hp'])
 
@@ -53,11 +54,11 @@ def input_integer(message, min_val, max_val):
     while True:
         try:
             value = input(message)
-            value = int (value)
+            value = int(value)
             if min_val <= value <= max_val:
                 return value
             else:
-                return(f"Chose a number between {min_val} and {max_val}.")
+                print(f"Chose a number between {min_val} and {max_val}.")
         except ValueError:
             print("Chose a correct number.")
 
