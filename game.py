@@ -50,8 +50,11 @@ def combat_turn(team, monster):
 
     for character in team:
         if character.is_alive():
-            damage = character.attack(monster)
-            print(f"{character.name} attacks {monster.name} and deals {damage} damage.")
+            damage, is_critical = character.attack(monster)
+            if is_critical:
+                print(f"MASTERCLASS CRITICAL HIT. {character.name} attacks {monster.name} and deals {damage} damage.")
+            else:
+                print(f"{character.name} attacks {monster.name} and deals {damage} damage.")
 
             if not monster.is_alive():
                 print(f"\n{monster.name} is dead.")

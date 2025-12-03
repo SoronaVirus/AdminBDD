@@ -18,7 +18,7 @@ def get_all_characters():
     db = get_connection()
     characters_db = list(db.characters.find())
     print(characters_db)
-    return [Character(c['name'], c['attack'], c['armor'], c['hp']) for c in characters_db]
+    return [Character(c['name'], c['attack'], c['armor'], c['hp'], c['crit_chance']) for c in characters_db]
 
 def get_random_monster():
     db = get_connection()
