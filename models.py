@@ -34,7 +34,7 @@ class Character(Entity):
         is_critical = random.randint(1,100) <= self.crit_chance
 
         if is_critical:
-            damage = max(0, (self.attack_power * self.crit_multiplier) - target.armor)
+            damage = round(max(0, (self.attack_power * self.crit_multiplier) - target.armor))
         else:
             damage = max(0, self.attack_power - target.armor)
 

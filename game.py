@@ -4,6 +4,9 @@ from models import Character
 from utils import *
 from effects import generate_three_effects, print_effects, apply_effect_to_team
 
+#Variables
+ATTACK_EFFECT_TRESHOLD = 10
+
 #Affichage des persos dispo
 def print_available_characters(available_characters):
     print("Characters available:\n")
@@ -65,14 +68,16 @@ def print_team(team):
             status = "Dead"
         print(f'{status}. Character {i}: {character}')
 
-def combat_turn(team, monster, attack_counter):
+def combat_turn(team, monster, attack_counter, wave):
     print_line()
-    print(f"Team's turn. [{attack_counter}/20 attacks]")
+    print(f"Team's turn. [{attack_counter}/{ATTACK_EFFECT_TRESHOLD} attacks]")
     print_line()
 
     for character in team:
         if character.is_alive():
+            attack_counter += 1
             damage, is_critical = character.attack(monster)
+            
             if is_critical:
                 print(f"MASTERCLASS CRITICAL HIT. {character.name} attacks {monster.name} and deals {damage} damage.")
             else:
@@ -80,9 +85,33 @@ def combat_turn(team, monster, attack_counter):
 
             if not monster.is_alive():
                 print(f"\n{monster.name} is dead.")
-                return True
+                return True, attack_counter
             
             time.sleep(2)
+            
+            if attack_counter >= ATTACK_EFFECT_TRESHOLD:
+                attack_counter = 0
+                time.sleep(1)
+                
+                clear_terminal()
+                effects = generate_three_effects()
+                print_effects(effects)
+                
+                choice = input_integer("Choisissez un effet (1-3): ", 1, 3)
+                chosen_effect = effects[choice - 1]
+                
+                apply_effect_to_team(team, chosen_effect)
+                time.sleep(3)
+                
+                clear_terminal()
+                print_title(f"Wave {wave}")
+                print(f"\nFighting {monster.name}...\n")
+                print_team(team)
+                
+                print_line()
+                print(f"Team's turn continues. [{attack_counter}/{ATTACK_EFFECT_TRESHOLD} attacks]")
+                print_line()
+                time.sleep(1)
     
     print(f"\n{monster.name} HP left: {monster.hp}/{monster.hp_max}")
 
@@ -103,6 +132,9 @@ def combat_turn(team, monster, attack_counter):
             print(f"{monster.name} attacks {target.name} and deals {damage} damage.")
             if thorns_damage > 0:
                 print(f"{target.name}'s thorns deal {thorns_damage} damage back to {monster.name}.")
+                if not monster.is_alive():
+                    print(f"\n{monster.name} is killed by thorns. Cheh.")
+                    return True, attack_counter
         else:
             print(f"OHMAGAAAAAD DODGED ATTACK MAAAN!!! {monster.name} attacks but {target.name} dodge like Wesker")
 
@@ -110,7 +142,7 @@ def combat_turn(team, monster, attack_counter):
             print(f"\n{target.name} is dead.")
 
     time.sleep(2)
-    return False
+    return False, attack_counter
             
 def verified_defeat(team):
     for c in team:
@@ -149,29 +181,7 @@ def start_game():
         time.sleep(1)
 
         while monster.is_alive() and not verified_defeat(team):
-            attacks_this_turn = sum(1 for c in team if c.is_alive())
-            attack_counter += attacks_this_turn
-            
-            if attack_counter >= 15:
-                attack_counter = 0 
-                
-                clear_terminal()
-                effects = generate_three_effects()
-                print_effects(effects)
-                
-                choice = input_integer("Choisissez un effet (1-3): ", 1, 3)
-                chosen_effect = effects[choice - 1]
-                
-                apply_effect_to_team(team, chosen_effect)
-                time.sleep(3)
-                
-                clear_terminal()
-                print_title(f"Wave {wave}")
-                print(f"\nFighting {monster.name}...\n")
-                print_team(team)
-                time.sleep(1)
-
-            victory = combat_turn(team, monster, attack_counter)
+            victory, attack_counter = combat_turn(team, monster, attack_counter, wave)
 
             if victory:
                 break
