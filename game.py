@@ -152,7 +152,7 @@ def start_game():
             attacks_this_turn = sum(1 for c in team if c.is_alive())
             attack_counter += attacks_this_turn
             
-            if attack_counter >= 20:
+            if attack_counter >= 15:
                 attack_counter = 0 
                 
                 clear_terminal()
