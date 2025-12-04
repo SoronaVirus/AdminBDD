@@ -22,10 +22,12 @@ class Entity:
 #Classe des personnages
 class Character(Entity):
 
-    def __init__(self, name, attack, armor, hp, crit_chance, evasion):
+    def __init__(self, name, attack, armor, hp, crit_chance, evasion, lifesteal, thorns):
         super().__init__(name, attack, armor, hp)
         self.crit_chance = crit_chance
         self.evasion = evasion
+        self.lifesteal = lifesteal
+        self.thorns = thorns
         self.crit_multiplier = 2
     
     def attack(self, target):
@@ -37,21 +39,40 @@ class Character(Entity):
             damage = max(0, self.attack_power - target.armor)
 
         target.take_damage(damage)
+
+        if self.lifesteal > 0 and damage > 0:
+            heal_amount = round(damage * (self.lifesteal / 100))
+            if heal_amount > 0:
+                self.hp = min(self.hp + heal_amount, self.hp_max)
+
         return damage, is_critical
     
     def __str__(self):
         base_str = super().__str__()
-        return f"{base_str}, CRIT: {self.crit_chance}%, EVA: {self.evasion}%"
+        stats = f"{base_str}, CRIT: {self.crit_chance}%, EVA: {self.evasion}%"
+
+        if self.lifesteal > 0:
+            stats += f", LIFESTEAL: {self.lifesteal}%"
+
+        if self.thorns > 0:
+            stats += f", THORNS: {self.thorns}%"
+
+        return stats
     
 #Classe des monstres
 class Monster(Entity):
     
     def attack(self, target):
         if random.randint(1,100) <= target.evasion:
-            return 0, False
+            return 0, False, 0
         
         damage = max(0, self.attack_power - target.armor)
         target.take_damage(damage)
-        return damage, True
 
-#Classe des objets ???
+        thorns_damage = 0
+        if target.thorns > 0 and damage > 0:
+            thorns_damage = round(damage * (target.thorns / 100))
+            if thorns_damage > 0:
+                self.take_damage(thorns_damage)
+
+        return damage, True, thorns_damage

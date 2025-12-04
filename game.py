@@ -2,6 +2,7 @@ import random
 import time
 from models import Character
 from utils import *
+from effects import generate_three_effects, print_effects, apply_effect_to_team
 
 #Affichage des persos dispo
 def print_available_characters(available_characters):
@@ -40,7 +41,7 @@ def select_character(available_characters, team, number_member, player_name):
     chosen_character = get_character_choice(available_characters)
     
     print(f"\n{chosen_character.name} added to the team.\n")
-    time.sleep(2)
+    time.sleep(1)
     
     return chosen_character
 
@@ -64,9 +65,9 @@ def print_team(team):
             status = "Dead"
         print(f'{status}. Character {i}: {character}')
 
-def combat_turn(team, monster):
+def combat_turn(team, monster, attack_counter):
     print_line()
-    print("Team's turn.")
+    print(f"Team's turn. [{attack_counter}/20 attacks]")
     print_line()
 
     for character in team:
@@ -81,7 +82,7 @@ def combat_turn(team, monster):
                 print(f"\n{monster.name} is dead.")
                 return True
             
-            time.sleep(3)
+            time.sleep(2)
     
     print(f"\n{monster.name} HP left: {monster.hp}/{monster.hp_max}")
 
@@ -96,17 +97,19 @@ def combat_turn(team, monster):
 
     if alive_characters:
         target = random.choice(alive_characters)
-        damage, hit_success = monster.attack(target)
+        damage, hit_success, thorns_damage = monster.attack(target)
 
         if hit_success:
             print(f"{monster.name} attacks {target.name} and deals {damage} damage.")
+            if thorns_damage > 0:
+                print(f"{target.name}'s thorns deal {thorns_damage} damage back to {monster.name}.")
         else:
             print(f"OHMAGAAAAAD DODGED ATTACK MAAAN!!! {monster.name} attacks but {target.name} dodge like Wesker")
 
         if not target.is_alive():
             print(f"\n{target.name} is dead.")
 
-    time.sleep(3)
+    time.sleep(2)
     return False
             
 def verified_defeat(team):
@@ -126,9 +129,10 @@ def start_game():
     print_title("Starting fight.")
     print_team(team)
 
-    time.sleep(2)
+    time.sleep(1)
 
     wave = 0
+    attack_counter = 0
 
     while True:
         wave +=1
@@ -142,10 +146,32 @@ def start_game():
 
         print_team(team)
 
-        time.sleep(2)
+        time.sleep(1)
 
         while monster.is_alive() and not verified_defeat(team):
-            victory = combat_turn(team, monster)
+            attacks_this_turn = sum(1 for c in team if c.is_alive())
+            attack_counter += attacks_this_turn
+            
+            if attack_counter >= 20:
+                attack_counter = 0 
+                
+                clear_terminal()
+                effects = generate_three_effects()
+                print_effects(effects)
+                
+                choice = input_integer("Choisissez un effet (1-3): ", 1, 3)
+                chosen_effect = effects[choice - 1]
+                
+                apply_effect_to_team(team, chosen_effect)
+                time.sleep(3)
+                
+                clear_terminal()
+                print_title(f"Wave {wave}")
+                print(f"\nFighting {monster.name}...\n")
+                print_team(team)
+                time.sleep(1)
+
+            victory = combat_turn(team, monster, attack_counter)
 
             if victory:
                 break
@@ -157,7 +183,7 @@ def start_game():
             print_title(f"Wave {wave}")
             print(f"\nFighting {monster.name}...\n")
             print_team(team)
-            time.sleep(2)
+            time.sleep(1)
         
         if verified_defeat(team):
             clear_terminal()
@@ -172,7 +198,8 @@ def start_game():
 
             save_score(player_name, wave - 1)
             print_line()
+            input("\nPress Enter to return to the menu")
             break
 
         print(f"\nWave's finished.")
-        time.sleep(3)
+        time.sleep(2)
